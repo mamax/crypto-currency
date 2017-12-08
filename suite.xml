@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="AutomationSuite">
+
+  <listeners>
+    <listener class-name="com.tradingview.ru.util.ScreenShot" />
+  </listeners>
+
+  <!--<test name="LoginTest-FF" preserve-order="false">-->
+    <!--<classes>-->
+      <!--<class name="com.epam.LoginTest">-->
+      <!--<methods>-->
+          <!--<include name="testLogin"/>-->
+          <!--<exclude name="testLoginNegative"/>-->
+      <!--</methods>-->
+      <!--</class>-->
+    <!--</classes>-->
+  <!--</test>-->
+
+  <test name="LoginTest-CH" preserve-order="false">
+    <classes>
+      <class name="com.tradingview.ru.TestSimple">
+        <!--<methods>-->
+          <!--<exclude name="testLogin" />-->
+          <!--<include name="testLoginNegative"/>-->
+        <!--</methods>-->
+      </class>
+    </classes>
+  </test>
+
+</suite>
