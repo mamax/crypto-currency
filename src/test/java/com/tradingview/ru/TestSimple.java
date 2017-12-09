@@ -17,7 +17,7 @@ public class TestSimple extends BaseTest {
         goToUrlWrapper("https://ru.tradingview.com/cryptocurrency-signals/");
         HomePage homePage = new HomePage(driver);
 
-        for (int i=1; i<25; i++){
+        for (int i=1; i<homePage.getElements().size(); i++){
             String instrField = driver.findElement(By.xpath(String.format("//*[@id='js-screener-container']/div[4]/table/tbody/tr[%s]/td[1]/a", i))).getText();
             String priceField = driver.findElement(By.xpath(String.format("//*[@id='js-screener-container']/div[4]/table/tbody/tr[%s]/td[2]/span", i))).getText();
             String ratingField = driver.findElement(By.xpath(String.format("//*[@id='js-screener-container']/div[4]/table/tbody/tr[%s]/td[8]/span", i))).getText();
