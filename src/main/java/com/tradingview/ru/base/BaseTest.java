@@ -1,12 +1,13 @@
 package com.tradingview.ru.base;
 
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
-import org.testng.annotations.BeforeTest;
+import org.slf4j.LoggerFactory;
+import org.testng.ITestContext;
+import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,32 +18,32 @@ public class BaseTest extends BrowserConf {
 
     protected static WebDriver driver;
     protected static Logger log;
+//
+//    @BeforeTest
+//    public static void setupClass() {
+//        ChromeDriverManager.getInstance().setup();
+//    }
 
-    @BeforeTest
-    public static void setupClass() {
-        ChromeDriverManager.getInstance().setup();
+
+    @BeforeSuite
+    public static void setUpLogger(ITestContext itr){
+        String testName = itr.getCurrentXmlTest().getName();
+        log = LoggerFactory.getLogger(testName);
     }
 
+    @BeforeMethod(alwaysRun = true)
+    @Parameters({"browser"})
+    public static void setUp(@Optional("CHROME") String browser){
+        driver = BrowserConf.getDriver(browser, log);
+    }
 
-//    @BeforeSuite
-//    public static void setUpLogger(ITestContext itr){
-//        String testName = itr.getCurrentXmlTest().getName();
-//        log = LoggerFactory.getLogger(testName);
-//    }
-//
-//    @BeforeMethod(alwaysRun = true)
-//    @Parameters({"browser"})
-//    public static void setUp(@Optional("PHANTOM_JS") String browser){
-//        driver = BrowserConf.getDriver(browser, log);
-//    }
-//
-//    @AfterTest(alwaysRun = true)
-//    public void tearDown(){
-//        if (driver != null) {
-//            driver.quit();
-//            log.info("Close browser");
-//        }
-//    }
+    @AfterTest(alwaysRun = true)
+    public void tearDown(){
+        if (driver != null) {
+            driver.quit();
+            log.info("Close browser");
+        }
+    }
 
     public static void captureScreenShot(String fileName) throws IOException {
         try {

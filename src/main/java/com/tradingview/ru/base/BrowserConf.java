@@ -3,10 +3,12 @@ package com.tradingview.ru.base;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
+import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 
 import java.util.concurrent.TimeUnit;
@@ -40,10 +42,10 @@ public class BrowserConf {
                     driver = new InternetExplorerDriver();
                     break;
 
-//                case PHANTOM_JS:
-//                    PhantomJsDriverManager.getInstance().setup();
-//                    driver = new PhantomJSDriver();
-//                    break;
+                case PHANTOM_JS:
+                    PhantomJsDriverManager.getInstance().setup();
+                    driver = new PhantomJSDriver();
+                    break;
 
                 default:
                     ChromeDriverManager.getInstance().setup();
@@ -51,12 +53,12 @@ public class BrowserConf {
             }
 
             driver.manage().deleteAllCookies();
-//            driver.manage().window().maximize();
+            driver.manage().window().maximize();
             log.info("Dimension : " + driver.manage().window().getSize());
             log.info("Opening browser");
-            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-            driver.manage().timeouts().pageLoadTimeout(85, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            driver.manage().timeouts().pageLoadTimeout(100, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
 
             return driver;
     }
