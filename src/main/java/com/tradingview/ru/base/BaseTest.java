@@ -1,48 +1,57 @@
 package com.tradingview.ru.base;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.tradingview.ru.util.JsonHelper;
+import com.tradingview.ru.util.ScreenShot;
+import io.restassured.RestAssured;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.ITestContext;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeSuite;
+import org.testng.log4testng.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.NoSuchFileException;
+import java.util.Properties;
 
 public class BaseTest extends BrowserConf {
 
+    public static Properties config = new Properties();
+    protected static String url;
     protected static WebDriver driver;
-    protected static Logger log;
-//
-//    @BeforeTest
-//    public static void setupClass() {
-//        ChromeDriverManager.getInstance().setup();
-//    }
-
+    private static final Logger LOGGER = Logger.getLogger(ScreenShot.class);
 
     @BeforeSuite
-    public static void setUpLogger(ITestContext itr){
-        String testName = itr.getCurrentXmlTest().getName();
-        log = LoggerFactory.getLogger(testName);
+    public static String initBaseUrl()  throws IOException  {
+
+        config.load(getResource("config.properties"));
+        url = config.getProperty("baseUrl");
+        return url;
     }
 
-    @BeforeMethod(alwaysRun = true)
-    @Parameters({"browser"})
-    public static void setUp(@Optional("CHROME") String browser){
-        driver = BrowserConf.getDriver(browser, log);
+    @BeforeSuite(dependsOnMethods = "initBaseUrl")
+    public void init() {
+        RestAssured.baseURI = url;
     }
 
-    @AfterTest(alwaysRun = true)
-    public void tearDown(){
-        if (driver != null) {
-            driver.quit();
-            log.info("Close browser");
-        }
+    protected <T> T getWrapper(JsonNode jsonNode, Class<T> item)
+            throws IOException {
+        return JsonHelper.getObjectMapper().convertValue(jsonNode, item);
+    }
+
+    protected <T> T transformResponse(String resp, Class<T> item)
+            throws IOException {
+        JsonNode node = getJsonNode(resp);
+        return JsonHelper.getObjectMapper()
+                .convertValue(node, item);
+    }
+
+    private JsonNode getJsonNode(String resp)
+            throws IOException {
+        return JsonHelper.getObjectMapper().readTree(resp);
     }
 
     public static void captureScreenShot(String fileName) throws IOException {
@@ -51,13 +60,18 @@ public class BaseTest extends BrowserConf {
                     OutputType.FILE);
             FileUtils.copyFile(scrFile, new File(System.getProperty("user.dir") + File.separator + "target" + File.separator + "surefire-reports" + File.separator + "html" + File.separator + fileName + ".jpg"));
         } catch (IOException e) {
-            log.error(String.valueOf(e));
+            LOGGER.error(String.valueOf(e));
         }
     }
 
-    protected void goToUrlWrapper(String text){
-        driver.get(text);
-        log.info("On the home page " + text);
+    protected JsonNode parseJsonNode(String jsonFileName) {
+        File file = new File(ClassLoader.getSystemResource("json/" + jsonFileName + ".json").getFile());
+        try {
+            return JsonHelper.getObjectMapper().readTree(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
