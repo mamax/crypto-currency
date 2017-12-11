@@ -11,9 +11,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
@@ -21,21 +19,39 @@ import static org.hamcrest.core.IsNot.not;
 
 public class TestSimple extends TestSuite {
 
-    Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
-
+    private Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
     private JsonNode postJson;
     private EntityWrapper atWr;
     private String response;
-    private DataWrapper resultWrp;
+    private List<Integer> newRangeList = new ArrayList<>();
 
     @BeforeClass
-    public void setUp(){
+    public void setUp() throws IOException {
         postJson = parseJsonNode("me");
+        atWr = getWrapper(postJson, EntityWrapper.class);
     }
 
     @Test
-    public void testSimple() throws IOException {
-        atWr = getWrapper(postJson, EntityWrapper.class);
+    public void setRange(){
+        String totalCount = given()
+                    .contentType(ContentType.JSON)
+                    .body(atWr)
+                .when()
+                    .post("/scan")
+                .then()
+                    .statusCode(200)
+                    .extract()
+                    .path("totalCount")
+                    .toString();
+
+        int endList = Integer.parseInt(totalCount);
+        newRangeList.add(0);
+        newRangeList.add(endList);
+    }
+
+    @Test(dependsOnMethods = "setRange")
+    public void testSimple() {
+        atWr.setRange(newRangeList);
 
         response = given()
                 .contentType(ContentType.JSON)
@@ -52,7 +68,7 @@ public class TestSimple extends TestSuite {
 
     @Test(dependsOnMethods = "testSimple")
     public void testParse() throws IOException {
-        resultWrp = transformResponse(response, DataWrapper.class);
+        DataWrapper resultWrp = transformResponse(response, DataWrapper.class);
 
         List<DataEntity> dataEntityList = resultWrp.getData();
 
