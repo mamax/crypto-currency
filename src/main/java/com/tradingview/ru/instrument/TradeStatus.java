@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TradeStatus {
 
-    private String name;
     private String description;
     private double close;
-    private Long change;
-    private Long changeAbs;
-    private Long high;
-    private Long low;
-    private Long volume;
-    private Long recommendAll;
+    private double change;
+    private double changeAbs;
+    private double high;
+    private double low;
+    private double volume;
+    private double recommendAll;
     private String exchange;
-
 
 }

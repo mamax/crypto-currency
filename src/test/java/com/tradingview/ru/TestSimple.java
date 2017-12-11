@@ -5,13 +5,14 @@ import com.tradingview.ru.base.BaseTest;
 import com.tradingview.ru.instrument.TradeStatus;
 import com.tradingview.ru.request.EntityWrapper;
 import com.tradingview.ru.response.DataWrapper;
+import com.tradingview.ru.response.entity.DataEntity;
 import io.restassured.http.ContentType;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -32,14 +33,10 @@ public class TestSimple extends BaseTest {
         postJson = parseJsonNode("me");
     }
 
-    @BeforeMethod
-    public void setUpData() throws IOException {
+    @Test
+    public void testSimple() throws IOException {
         atWr = getWrapper(postJson, EntityWrapper.class);
 
-    }
-
-    @Test
-    public void testSimple(){
         response = given()
                 .contentType(ContentType.JSON)
                 .body(atWr)
@@ -56,7 +53,33 @@ public class TestSimple extends BaseTest {
     @Test(dependsOnMethods = "testSimple")
     public void testParse() throws IOException {
         resultWrp = transformResponse(response, DataWrapper.class);
-        System.out.println(resultWrp);
+
+        List<DataEntity> dataEntityList = resultWrp.getData();
+
+        for (DataEntity entity : dataEntityList){
+            TradeStatus tradeStatus = new TradeStatus();
+            HashMap<String, TradeStatus> map = new HashMap<>();
+
+            String key =  entity.getS();
+
+            String secondKey = entity.getD().get(0);
+            tradeStatus.setDescription(entity.getD().get(1));
+            tradeStatus.setClose(Double.parseDouble(entity.getD().get(2)));
+            tradeStatus.setChange(Double.parseDouble(entity.getD().get(3)));
+            tradeStatus.setChangeAbs(Double.parseDouble(entity.getD().get(4)));
+            tradeStatus.setHigh(Double.parseDouble(entity.getD().get(5)));
+            tradeStatus.setLow(Double.parseDouble(entity.getD().get(6)));
+            tradeStatus.setVolume(Double.parseDouble(entity.getD().get(7)));
+            tradeStatus.setRecommendAll(Double.parseDouble(entity.getD().get(8)));
+            tradeStatus.setExchange(entity.getD().get(9));
+
+            map.put(secondKey, tradeStatus);
+
+            itemsMap.put(key, map);
+        }
+
+        System.out.println(itemsMap.entrySet());
+
     }
 
 }
