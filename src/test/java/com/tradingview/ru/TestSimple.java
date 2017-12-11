@@ -20,22 +20,21 @@ import static org.hamcrest.core.IsNot.not;
 public class TestSimple extends TestSuite {
 
     private Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
-    private JsonNode postJson;
-    private EntityWrapper atWr;
+    private EntityWrapper entityWrapper;
     private String response;
-    private List<Integer> newRangeList = new ArrayList<>();
+    private List<Integer> rangeList = new ArrayList<>();
 
     @BeforeClass
     public void setUp() throws IOException {
-        postJson = parseJsonNode("me");
-        atWr = getWrapper(postJson, EntityWrapper.class);
+        JsonNode postJson = parseJsonNode("me");
+        entityWrapper = getWrapper(postJson, EntityWrapper.class);
     }
 
     @Test
     public void setRange(){
         String totalCount = given()
                     .contentType(ContentType.JSON)
-                    .body(atWr)
+                    .body(entityWrapper)
                 .when()
                     .post("/scan")
                 .then()
@@ -44,18 +43,17 @@ public class TestSimple extends TestSuite {
                     .path("totalCount")
                     .toString();
 
-        int endList = Integer.parseInt(totalCount);
-        newRangeList.add(0);
-        newRangeList.add(endList);
+        rangeList.add(0);
+        rangeList.add(Integer.parseInt(totalCount));
     }
 
     @Test(dependsOnMethods = "setRange")
     public void testSimple() {
-        atWr.setRange(newRangeList);
+        entityWrapper.setRange(rangeList);
 
         response = given()
                 .contentType(ContentType.JSON)
-                .body(atWr)
+                .body(entityWrapper)
         .when()
                 .post("/scan")
         .then()
