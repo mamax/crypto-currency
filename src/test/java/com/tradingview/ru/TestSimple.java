@@ -1,7 +1,7 @@
 package com.tradingview.ru;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.tradingview.ru.base.BaseTest;
+import com.tradingview.ru.base.TestSuite;
 import com.tradingview.ru.instrument.TradeStatus;
 import com.tradingview.ru.request.EntityWrapper;
 import com.tradingview.ru.response.DataWrapper;
@@ -19,7 +19,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.IsNot.not;
 
-public class TestSimple extends BaseTest {
+public class TestSimple extends TestSuite {
 
     Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
 
@@ -60,18 +60,18 @@ public class TestSimple extends BaseTest {
             TradeStatus tradeStatus = new TradeStatus();
             HashMap<String, TradeStatus> map = new HashMap<>();
 
-            String key =  entity.getS();
+            String key =  entity.getSerialCode();
 
-            String secondKey = entity.getD().get(0);
-            tradeStatus.setDescription(entity.getD().get(1));
-            tradeStatus.setClose(Double.parseDouble(entity.getD().get(2)));
-            tradeStatus.setChange(Double.parseDouble(entity.getD().get(3)));
-            tradeStatus.setChangeAbs(Double.parseDouble(entity.getD().get(4)));
-            tradeStatus.setHigh(Double.parseDouble(entity.getD().get(5)));
-            tradeStatus.setLow(Double.parseDouble(entity.getD().get(6)));
-            tradeStatus.setVolume(Double.parseDouble(entity.getD().get(7)));
-            tradeStatus.setRecommendAll(Double.parseDouble(entity.getD().get(8)));
-            tradeStatus.setExchange(entity.getD().get(9));
+            String secondKey = entity.getData().get(0);
+            tradeStatus.setDescription(entity.getData().get(1));
+            tradeStatus.setClose(Double.parseDouble(entity.getData().get(2)));
+            tradeStatus.setChange(Double.parseDouble(entity.getData().get(3)));
+            tradeStatus.setChangeAbs(Double.parseDouble(entity.getData().get(4)));
+            tradeStatus.setHigh(Double.parseDouble(entity.getData().get(5)));
+            tradeStatus.setLow(Double.parseDouble(entity.getData().get(6)));
+            tradeStatus.setVolume(Double.parseDouble(entity.getData().get(7)));
+            tradeStatus.setRecommendAll(Double.parseDouble(entity.getData().get(8)));
+            tradeStatus.setExchange(entity.getData().get(9));
 
             map.put(secondKey, tradeStatus);
 
