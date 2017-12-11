@@ -1,6 +1,6 @@
-package com.tradingview.ru.model;
+package com.tradingview.ru.request;
 
-import com.tradingview.ru.model.base.*;
+import com.tradingview.ru.request.entity.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

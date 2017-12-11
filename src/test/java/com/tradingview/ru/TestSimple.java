@@ -2,10 +2,9 @@ package com.tradingview.ru;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tradingview.ru.base.BaseTest;
-import com.tradingview.ru.instrument.Instrument;
-import com.tradingview.ru.instrument.Item;
-import com.tradingview.ru.model.EntityWrapper;
-import com.tradingview.ru.result.DataWrapper;
+import com.tradingview.ru.instrument.TradeStatus;
+import com.tradingview.ru.request.EntityWrapper;
+import com.tradingview.ru.response.DataWrapper;
 import io.restassured.http.ContentType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -21,7 +20,8 @@ import static org.hamcrest.core.IsNot.not;
 
 public class TestSimple extends BaseTest {
 
-    Map<Instrument, Item> itemMap = new HashMap();
+    Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
+
     private JsonNode postJson;
     private EntityWrapper atWr;
     private String response;

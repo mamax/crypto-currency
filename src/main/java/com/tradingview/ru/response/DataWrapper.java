@@ -1,7 +1,7 @@
-package com.tradingview.ru.result;
+package com.tradingview.ru.response;
 
-import com.tradingview.ru.model.base.AEntity;
-import com.tradingview.ru.result.entity.DataEntity;
+import com.tradingview.ru.request.entity.AEntity;
+import com.tradingview.ru.response.entity.DataEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

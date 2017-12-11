@@ -1,4 +1,4 @@
-package com.tradingview.ru.model.base;
+package com.tradingview.ru.request.entity;
 
 import com.tradingview.ru.util.JsonHelper;
 
