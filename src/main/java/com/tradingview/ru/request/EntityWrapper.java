@@ -17,24 +17,4 @@ public class EntityWrapper extends AEntity {
     private Options options;
     private List<Integer> range;
 
-    public EntityWrapper(List<Filter> filter, Symbols symbols, List<String> columns, Sort sort, Options options, List<Integer> range) {
-        this.filter = filter;
-        this.symbols = symbols;
-        this.columns = columns;
-        this.sort = sort;
-        this.options = options;
-        this.range = range;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "\"filter\":" + filter +'"'+
-                ", \"symbols\":" + symbols + '"'+
-                ", \"columns\":" + columns  +'"'+
-                ", \"sort\":" + sort  +'"'+
-                ", \"options\":" + options  +'"'+
-                ", \"range\":" + range +'"'+
-                '}';
-    }
 }
