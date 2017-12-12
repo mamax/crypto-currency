@@ -1,12 +1,12 @@
 package com.tradingview.ru;
 
 import com.beust.jcommander.internal.Lists;
-import com.tradingview.ru.base.TestSuite;
 import com.tradingview.ru.instrument.TradeStatus;
 import com.tradingview.ru.request.EntityWrapper;
 import com.tradingview.ru.request.entity.*;
 import com.tradingview.ru.response.DataWrapper;
 import com.tradingview.ru.response.entity.DataEntity;
+import com.tradingview.ru.util.JsonHelper;
 import io.restassured.http.ContentType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -21,7 +21,7 @@ import static org.hamcrest.core.IsNot.not;
 public class TestSimple extends TestSuite {
 
     private Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
-    private EntityWrapper entityWrapper= new EntityWrapper();
+    private EntityWrapper entityWrapper = new EntityWrapper();
     private String response;
     private List<Integer> rangeList = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public class TestSimple extends TestSuite {
 
     @Test(dependsOnMethods = "testSimple")
     public void testParse() throws IOException {
-        DataWrapper resultWrp = transformResponse(response, DataWrapper.class);
+        DataWrapper resultWrp = JsonHelper.transformResponse(response, DataWrapper.class);
 
         List<DataEntity> dataEntityList = resultWrp.getData();
 

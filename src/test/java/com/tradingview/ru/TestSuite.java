@@ -1,4 +1,4 @@
-package com.tradingview.ru.base;
+package com.tradingview.ru;
 
 import io.restassured.RestAssured;
 import org.testng.annotations.BeforeSuite;
@@ -8,13 +8,13 @@ import java.io.InputStream;
 import java.nio.file.NoSuchFileException;
 import java.util.Properties;
 
-public class BaseTest{
+public class TestSuite  {
 
     private static Properties config = new Properties();
     private static String url;
 
     @BeforeSuite
-    public static String initBaseUrl()  throws IOException  {
+    public static String initBaseUrl()  throws IOException {
         config.load(getResource("config.properties"));
         url = config.getProperty("baseUrl");
         return url;
