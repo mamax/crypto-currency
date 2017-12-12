@@ -13,4 +13,17 @@ public class Filter extends AEntity {
     private String operation;
     private List<Long> right;
 
+    public Filter(String left, String operation, List<Long> right) {
+        this.left = left;
+        this.operation = operation;
+        this.right = right;
+    }
+
+    public Filter(String left, String operation) {
+        this.left = left;
+        this.operation = operation;
+    }
+
+
+
 }

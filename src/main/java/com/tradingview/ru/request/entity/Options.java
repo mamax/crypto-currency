@@ -7,5 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Options extends AEntity {
 
+    public Options(String lang) {
+        this.lang = lang;
+    }
+
     private String lang;
 }

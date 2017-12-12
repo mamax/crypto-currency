@@ -1,9 +1,10 @@
 package com.tradingview.ru;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.beust.jcommander.internal.Lists;
 import com.tradingview.ru.base.TestSuite;
 import com.tradingview.ru.instrument.TradeStatus;
 import com.tradingview.ru.request.EntityWrapper;
+import com.tradingview.ru.request.entity.*;
 import com.tradingview.ru.response.DataWrapper;
 import com.tradingview.ru.response.entity.DataEntity;
 import io.restassured.http.ContentType;
@@ -20,15 +21,20 @@ import static org.hamcrest.core.IsNot.not;
 public class TestSimple extends TestSuite {
 
     private Map<String, Map<String, TradeStatus>> itemsMap = new HashMap();
-    private EntityWrapper entityWrapper;
+    private EntityWrapper entityWrapper= new EntityWrapper();
     private String response;
     private List<Integer> rangeList = new ArrayList<>();
 
     @BeforeClass
     public void setUp() throws IOException {
-        JsonNode postJson = parseJsonNode("me");
-        entityWrapper = getWrapper(postJson, EntityWrapper.class);
+        entityWrapper.setFilter(Lists.newArrayList(new Filter("change", "nempty"), new Filter("change", "in_range", new ArrayList<>(Arrays.asList(0L,Long.MAX_VALUE)))));
+        entityWrapper.setSymbols(new Symbols(new Query(new ArrayList<>())));
+        entityWrapper.setColumns(Lists.newArrayList("name","description","close","change","change_abs","high","low","volume","Recommend.All","exchange"));
+        entityWrapper.setSort(new Sort("change", "desc"));
+        entityWrapper.setOptions(new Options("ru"));
+        entityWrapper.setRange(Lists.newArrayList(0, 50));
     }
+
 
     @Test
     public void setRange(){

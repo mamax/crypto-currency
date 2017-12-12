@@ -9,5 +9,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Query extends AEntity {
 
+    public Query(List<String> types) {
+        this.types = types;
+    }
+
     private List<String> types;
 }
